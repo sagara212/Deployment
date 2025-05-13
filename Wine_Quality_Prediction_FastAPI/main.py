@@ -1,4 +1,6 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import joblib
 import pandas as pd
@@ -15,6 +17,9 @@ model = None
 scaler = None
 
 app = FastAPI()
+
+#serve the static files from the static folder
+app.mount('/static', StaticFiles(directory='static'), name='static')
 
 #Preload the Model for Latency Reduction
 @app.on_event('startup')
@@ -49,9 +54,12 @@ class WineFeatures(BaseModel):
 # Home endpoint
 @app.get('/')
 def home():
-    return{
-        'message': 'welcome to the wine quality prediction API! use the /predict/ endpoint to predict winw quality.'
-    }
+    return FileResponse("static/index.html")
+
+#prdiction page endpoint
+@app.get("/predict")
+async def predict_page():
+    return FileResponse('static/predict.html')
 
 #Predict endpoint
 @app.post('/predict')
