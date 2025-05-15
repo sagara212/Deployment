@@ -4,5 +4,5 @@ pydantic
 joblib
 pandas
 python-dotenv
-scikit-learn=1.4.2
+scikit-learn==1.4.2
 lightgbm
